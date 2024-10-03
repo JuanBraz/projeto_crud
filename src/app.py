@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import services
 
 def main():
@@ -12,6 +13,35 @@ def main():
         nomeEntry.delete(0, END)
         emailEntry.delete(0, END)
         senhaEntry.delete(0, END)
+
+    def listar_usuario():
+        usuarios = services.listar_usuario()
+
+        #Criar uma janela para mostrar a lista de usuarios
+        janela_listar = Toplevel(janela)
+        janela_listar.title('Listar Usuários')
+        janela_listar.geometry('600x300')
+        
+        #Criar uma Treeview (view, visualização) da lista, show='headings' para limpar o cabeçalho
+        tree = ttk.Treeview(janela_listar, columns=('ID', 'Nome', 'Email'), show='headings')
+        tree.heading('ID', text='ID')
+        tree.heading('Nome', text='Nome')
+        tree.heading('Email', text='Email')
+
+        #Criar botão de volta que ira fechar a tela de lista do usuario
+        voltar = Button(janela_listar, text='Voltar', width=10, command=janela_listar.destroy)
+        voltar.pack(fill=BOTH, expand=True, side=BOTTOM)
+
+        tree.pack(fill=BOTH, expand=True)
+
+        #Inserir os dados dos suarios na Treeview
+        for usuario in usuarios:
+            #END vai inserir o intem no final da tabela
+            tree.insert('', END, values=usuario)
+
+
+
+
 
     janela = Tk()
     janela.geometry('400x300')
@@ -50,7 +80,7 @@ def main():
     cadastrar = Button(janela, text='Cadastrar', width=10, command=on_enviar)
     cadastrar.place(x=100,y=200)
 
-    listar = Button(janela, text = 'Listar Usuários', width=15)
+    listar = Button(janela, text = 'Listar Usuários', width=15, command=listar_usuario)
     listar.place(x=200, y=200)
 
     janela.mainloop()
